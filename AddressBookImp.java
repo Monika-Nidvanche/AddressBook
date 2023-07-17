@@ -108,6 +108,23 @@ public class AddressBookImp {
 
 	}
 
+	// UC6, UC7
+	private static boolean checkDuplicateEntry(List<Contacts> list, String firstname) {
+		boolean record = true;
+		if (!list.isEmpty()) {
+			Iterator<Contacts> iterator = list.iterator();
+			while (iterator.hasNext()) {
+				Contacts c = iterator.next();
+				if (c.getFirstname().equals(firstname)) {
+					System.out.println("Contact already exist");
+					record = false;
+					System.out.println();
+				}
+			}
+		}
+		return record;
+	}
+
 	// UC4
 	private static void deleteContact(List<Contacts> list) {
 		boolean record = false;
