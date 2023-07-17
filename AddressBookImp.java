@@ -7,6 +7,9 @@ import java.util.ListIterator;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
+import com.addressbook1.Contacts;
+import com.addressbook1.DeleteContact;
+
 public class AddressBookImp {
 	static Scanner sc = new Scanner(System.in);
 	static Scanner s1 = new Scanner(System.in);
@@ -18,7 +21,8 @@ public class AddressBookImp {
 		while (n) {
 			System.out.println("1. Add contact");
 			System.out.println("2. Edit contact");
-			System.out.println("3. Exit \n");
+			System.out.println("3. Delete contact");
+			System.out.println("4. Exit \n");
 
 			System.out.print("Enter your choice : ");
 			int c = sc.nextInt();
@@ -35,6 +39,10 @@ public class AddressBookImp {
 				break;
 
 			case 3:
+				deleteContact(list);
+				break;
+
+			case 4:
 				n = false;
 				System.out.println("exit successfull...");
 				break;
@@ -44,6 +52,30 @@ public class AddressBookImp {
 
 			}
 		}
+	}
+
+	// UC4
+	private static void deleteContact(List<Contacts> list) {
+		boolean record = false;
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Enter name to delete : ");
+		String deleterecord = sc.next();
+		Iterator<Contacts> iterator = list.iterator();
+		while (iterator.hasNext()) {
+			Contacts c = iterator.next();
+			if (c.getFirstname().equals(deleterecord)) {
+				iterator.remove();
+				record = true;
+			}
+		}
+		if (record) {
+			System.out.println("Contact deleted...");
+			list.forEach(contacts -> System.out.println(contacts));
+		} else {
+			System.out.println("Contact not found");
+			System.out.println();
+		}
+
 	}
 
 	// UC3
