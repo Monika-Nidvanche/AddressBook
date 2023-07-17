@@ -13,9 +13,88 @@ public class AddressBookImp {
 	static List<Contacts> list = new ArrayList<>();
 
 	public static void getAddressBook() {
+		boolean n = true;
 
-		addContact(list);
+		while (n) {
+			System.out.println("1. Add contact");
+			System.out.println("2. Edit contact");
+			System.out.println("3. Exit \n");
 
+			System.out.print("Enter your choice : ");
+			int c = sc.nextInt();
+			System.out.println();
+
+			switch (c) {
+
+			case 1:
+				addContact(list);
+				break;
+
+			case 2:
+				editContact(list);
+				break;
+
+			case 3:
+				n = false;
+				System.out.println("exit successfull...");
+				break;
+
+			default:
+				System.out.println("Enter valid choice \n");
+
+			}
+		}
+	}
+
+	// UC3
+	private static void editContact(List<Contacts> list) {
+
+		boolean record = false;
+		Iterator<Contacts> iterator = list.iterator();
+		while (iterator.hasNext()) {
+			System.out.println(iterator.next());
+		}
+
+		System.out.print("Enter name to edit : ");
+		String firstname = sc.next();
+
+		ListIterator<Contacts> iterator1 = list.listIterator();
+		while (iterator1.hasNext()) {
+			Contacts c = iterator1.next();
+			if (c.getFirstname().equals(firstname)) {
+
+				System.out.print("Last Name : ");
+				c.setLastname(sc.next());
+
+				System.out.print("Address : ");
+				c.setAddress(sc.next());
+
+				System.out.print("City : ");
+				c.setCity(sc.next());
+
+				System.out.print("State : ");
+				c.setState(sc.next());
+
+				System.out.print("Zip : ");
+				c.setZip(sc.nextInt());
+
+				System.out.print("Phone : ");
+				c.setPhoneno(sc.nextLong());
+
+				System.out.print("Email : ");
+				c.setEmail(sc.next());
+
+				record = true;
+
+			}
+
+		}
+		if (record) {
+			System.out.println("Contact updated...");
+			list.forEach(contacts -> System.out.println(contacts));
+		} else {
+			System.out.println("Contact not found \n");
+		}
 	}
 
 	// UC2
