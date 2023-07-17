@@ -19,7 +19,8 @@ public class AddressBookImp {
 			System.out.println("1. Add contact");
 			System.out.println("2. Edit contact");
 			System.out.println("3. Delete contact");
-			System.out.println("4. Exit \n");
+			System.out.println("4. Add multiple contact");
+			System.out.println("5. Exit \n");
 
 			System.out.print("Enter your choice : ");
 			int c = sc.nextInt();
@@ -40,6 +41,10 @@ public class AddressBookImp {
 				break;
 
 			case 4:
+				addMultipleContacts(list);
+				break;
+
+			case 5:
 				n = false;
 				System.out.println("exit successfull...");
 				break;
@@ -49,6 +54,58 @@ public class AddressBookImp {
 
 			}
 		}
+	}
+
+	// UC5
+	private static void addMultipleContacts(List<Contacts> list) {
+
+		System.out.print("Enter count to add contacts : ");
+		int count = sc.nextInt();
+		boolean record = true;
+		while (count > 0) {
+
+			System.out.println("Please enter below contact details...");
+			System.out.print("First Name : ");
+			String firstname = sc.next();
+
+			record = checkDuplicateEntry(list, firstname);
+
+			if (record) {
+				System.out.print("Last Name : ");
+				String lastname = sc.next();
+
+				System.out.print("Address : ");
+				String address = s1.nextLine();
+
+				System.out.print("City : ");
+				String city = sc.next();
+
+				System.out.print("State : ");
+				String state = sc.next();
+
+				System.out.print("Zip : ");
+				int zip = sc.nextInt();
+
+				System.out.print("Phone : ");
+				long phone = sc.nextLong();
+
+				System.out.print("Email : ");
+				String email = sc.next();
+
+				list.add(new Contacts(firstname, lastname, address, city, state, zip, phone, email));
+				count--;
+			}
+			if (!record) {
+				count = 0;
+			}
+
+		}
+		if (record) {
+			System.out.print("Contacts added...\n");
+			list.forEach(contacts -> System.out.println(contacts));
+			System.out.println();
+		}
+
 	}
 
 	// UC4
