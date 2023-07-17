@@ -4,6 +4,11 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -13,6 +18,8 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+
+import com.addressbook1.Contacts;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 
@@ -35,7 +42,8 @@ public class AddressBookImp {
 			System.out.println("8. Sort contact by name");
 			System.out.println("9. File IO (Read/Write)");
 			System.out.println("10. CSV File (Read/Write)");
-			System.out.println("11. Exit \n");
+			System.out.println("11. JDBC Statement select");
+			System.out.println("12. Exit \n");
 
 			System.out.print("Enter your choice : ");
 			int c = sc.nextInt();
@@ -84,6 +92,10 @@ public class AddressBookImp {
 				break;
 
 			case 11:
+				selectStatement();
+				break;
+
+			case 12:
 				n = false;
 				System.out.println("exit successfull...");
 				break;
@@ -93,6 +105,54 @@ public class AddressBookImp {
 
 			}
 		}
+	}
+
+	// UC14
+	private static void selectStatement() {
+
+		final String READ_QUERY = "select * from addressbooktable";
+
+		Connection connection = getConnection();
+		ArrayList<Contacts> addressBookDB = new ArrayList<Contacts>();
+
+		try {
+			Statement statement = connection.createStatement();
+			ResultSet result = statement.executeQuery(READ_QUERY);
+			while (result.next()) {
+
+				addressBookDB.add(
+						new Contacts(result.getString(1), result.getString(2), result.getString(3), result.getString(4),
+								result.getString(5), result.getInt(6), result.getInt(7), result.getString(8)));
+			}
+
+			System.out.println("Records from db ");
+			addressBookDB.forEach(contacts -> System.out.println(contacts));
+			System.out.println();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	private static Connection getConnection() {
+		final String URL = "jdbc:mysql://localhost:3306/addressbook";
+		final String USER = "root";
+		final String PASSWORD = "monika@123";
+
+		Connection connection = null;
+
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			connection = DriverManager.getConnection(URL, USER, PASSWORD);
+
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return connection;
+
 	}
 
 	// UC13
@@ -263,7 +323,7 @@ public class AddressBookImp {
 		System.out.print("Enter state : ");
 		String searchbystate = sc.next();
 
-		long stream = list.stream().filter(l -> (l.state.equals(searchbystate))).count();
+		long stream = list.stream().filter(l -> (l.getState().equals(searchbystate))).count();
 		System.out.println(stream + "\n");
 
 	}
@@ -273,7 +333,7 @@ public class AddressBookImp {
 		System.out.print("Enter city : ");
 		String searchbycity = sc.next();
 
-		long stream = list.stream().filter(l -> (l.city.equals(searchbycity))).count();
+		long stream = list.stream().filter(l -> (l.getCity().equals(searchbycity))).count();
 		System.out.println(stream + "\n");
 
 	}
@@ -309,8 +369,8 @@ public class AddressBookImp {
 		System.out.print("Enter state : ");
 		String searchbystate = sc.next();
 
-		Map<String, String> map = list.stream().filter(l -> (l.state.equals(searchbystate)))
-				.collect(Collectors.toMap(l -> l.firstname, l -> l.state));
+		Map<Object, Object> map = list.stream().filter(l -> (l.getState().equals(searchbystate)))
+				.collect(Collectors.toMap(l -> l.getFirstname(), l -> l.getState()));
 		System.out.println(map + "\n");
 
 	}
@@ -320,8 +380,8 @@ public class AddressBookImp {
 		System.out.print("Enter city : ");
 		String searchbycity = sc.next();
 
-		Map<String, String> map = list.stream().filter(l -> (l.city.equals(searchbycity)))
-				.collect(Collectors.toMap(l -> l.firstname, l -> l.city));
+		Map<Object, Object> map = list.stream().filter(l -> (l.getCity().equals(searchbycity)))
+				.collect(Collectors.toMap(l -> l.getFirstname(), l -> l.getCity()));
 		System.out.println(map + "\n");
 
 	}
