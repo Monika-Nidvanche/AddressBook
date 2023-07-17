@@ -1,6 +1,7 @@
 package com.addressbook;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -25,7 +26,8 @@ public class AddressBookImp {
 			System.out.println("5. Search contacts");
 			System.out.println("6. Search persion by city or state");
 			System.out.println("7. Contact count by city or state");
-			System.out.println("8. Exit \n");
+			System.out.println("8. Sort contact by name");
+			System.out.println("9. Exit \n");
 
 			System.out.print("Enter your choice : ");
 			int c = sc.nextInt();
@@ -62,6 +64,10 @@ public class AddressBookImp {
 				break;
 
 			case 8:
+				sortByName(list);
+				break;
+
+			case 9:
 				n = false;
 				System.out.println("exit successfull...");
 				break;
@@ -71,6 +77,16 @@ public class AddressBookImp {
 
 			}
 		}
+	}
+
+	// UC11
+	private static void sortByName(List<Contacts> list) {
+
+		Comparator<Contacts> cbfn = Comparator.comparing(Contacts::getFirstname);
+		List<Contacts> sc = list.stream().sorted(cbfn).collect(Collectors.toList());
+		sc.forEach(contacts -> System.out.println(contacts));
+		System.out.println();
+
 	}
 
 	// UC10
