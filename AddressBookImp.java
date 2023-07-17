@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -41,7 +42,8 @@ public class AddressBookImp {
 			System.out.println("9. File IO (Read/Write)");
 			System.out.println("10. CSV File (Read/Write)");
 			System.out.println("11. JDBC Statement select");
-			System.out.println("12. Exit \n");
+			System.out.println("12. JDBC PrepareStatement update");
+			System.out.println("13. Exit \n");
 
 			System.out.print("Enter your choice : ");
 			int c = sc.nextInt();
@@ -94,6 +96,10 @@ public class AddressBookImp {
 				break;
 
 			case 12:
+				updateStatement();
+				break;
+
+			case 13:
 				n = false;
 				System.out.println("exit successfull...");
 				break;
@@ -103,6 +109,134 @@ public class AddressBookImp {
 
 			}
 		}
+	}
+
+	// UC15
+	private static void updateStatement() {
+
+		Connection connection = getConnection();
+		final String READ_QUERY = "select * from addressbooktable";
+		ArrayList<Contacts> addressBookDB = new ArrayList<Contacts>();
+
+		try {
+			Statement statement = connection.createStatement();
+			ResultSet result = statement.executeQuery(READ_QUERY);
+			while (result.next()) {
+
+				addressBookDB.add(
+						new Contacts(result.getString(1), result.getString(2), result.getString(3), result.getString(4),
+								result.getString(5), result.getInt(6), result.getInt(7), result.getString(8)));
+			}
+
+			System.out.println("Records from db ");
+			addressBookDB.forEach(contacts -> System.out.println(contacts));
+			System.out.println();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		PreparedStatement ps = null;
+		try {
+			ps = connection.prepareStatement("update addressbooktable set lastname=?,address=?,city=?,state=?,"
+					+ "zip=?,phoneno=?,email=? where firstname=?");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		System.out.print("Enter name to edit : ");
+		String firstname = sc.next();
+		Iterator<Contacts> iterator1 = addressBookDB.iterator();
+		boolean record = false;
+		while (iterator1.hasNext()) {
+			Contacts c = iterator1.next();
+			if (c.getFirstname().equals(firstname)) {
+				try {
+					ps.setString(8, firstname);
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+
+				System.out.print("Last Name : ");
+				String lastname = sc.next();
+				try {
+					ps.setString(1, lastname);
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+
+				System.out.print("Address : ");
+				String address = s1.nextLine();
+				try {
+					ps.setString(2, address);
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+
+				System.out.print("City : ");
+				String city = sc.next();
+				try {
+					ps.setString(3, city);
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+
+				System.out.print("State : ");
+				String state = sc.next();
+				try {
+					ps.setString(4, state);
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+
+				System.out.print("Zip : ");
+				int zip = sc.nextInt();
+				try {
+					ps.setInt(5, zip);
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+
+				System.out.print("Phone : ");
+				long phone = sc.nextLong();
+				try {
+					ps.setLong(6, phone);
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+
+				System.out.print("Email : ");
+				String email = sc.next();
+				try {
+					ps.setString(7, email);
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+
+				try {
+					ps.execute();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				record = true;
+			}
+
+		}
+		if (record) {
+			System.out.println("Statement updated");
+		} else {
+			System.out.println("Record not found");
+		}
+		System.out.println();
+		try {
+			connection.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		try {
+			ps.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	// UC14
@@ -175,7 +309,7 @@ public class AddressBookImp {
 
 		String path = "C:\\AddressBook\\Contact.csv";
 		try (CSVReader csvReader = new CSVReader(new FileReader(path))) {
-			String[] header = csvReader.readNext();
+			csvReader.readNext();
 			String[] file;
 			while ((file = csvReader.readNext()) != null) {
 				String firstname = file[0];
