@@ -22,6 +22,8 @@ import java.util.stream.Collectors;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 
+import jdbc.Configuration;
+
 public class AddressBookImp {
 	static Scanner sc = new Scanner(System.in);
 	static Scanner s1 = new Scanner(System.in);
@@ -43,7 +45,8 @@ public class AddressBookImp {
 			System.out.println("10. CSV File (Read/Write)");
 			System.out.println("11. JDBC Statement select");
 			System.out.println("12. JDBC PrepareStatement update");
-			System.out.println("13. Exit \n");
+			System.out.println("13. JDBC PrepareStatement insert");
+			System.out.println("14. Exit \n");
 
 			System.out.print("Enter your choice : ");
 			int c = sc.nextInt();
@@ -100,6 +103,10 @@ public class AddressBookImp {
 				break;
 
 			case 13:
+				insertStatement();
+				break;
+
+			case 14:
 				n = false;
 				System.out.println("exit successfull...");
 				break;
@@ -109,6 +116,101 @@ public class AddressBookImp {
 
 			}
 		}
+	}
+
+	// UC16
+	private static void insertStatement() {
+
+		Connection connection = Configuration.connection;
+		PreparedStatement ps = null;
+		try {
+			ps = connection.prepareStatement("insert into addressbooktable (firstname,"
+					+ "lastname,address,city,state,zip,phoneno,email)values(?,?,?,?,?,?,?,?)");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		System.out.println("Please enter below contact details...");
+		System.out.print("First Name : ");
+		String firstname = sc.next();
+		try {
+			ps.setString(1, firstname);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		System.out.print("Last Name : ");
+		String lastname = sc.next();
+		try {
+			ps.setString(2, lastname);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		System.out.print("Address : ");
+		String address = s1.nextLine();
+		try {
+			ps.setString(3, address);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		System.out.print("City : ");
+		String city = sc.next();
+		try {
+			ps.setString(4, city);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		System.out.print("State : ");
+		String state = sc.next();
+		try {
+			ps.setString(5, state);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		System.out.print("Zip : ");
+		int zip = sc.nextInt();
+		try {
+			ps.setInt(6, zip);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		System.out.print("Phone : ");
+		long phone = sc.nextLong();
+		try {
+			ps.setLong(7, phone);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		System.out.print("Email : ");
+		String email = sc.next();
+		try {
+			ps.setString(8, email);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		try {
+			ps.execute();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		System.out.println("Record inserted \n");
+		try {
+			connection.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		try {
+			ps.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	// UC15
