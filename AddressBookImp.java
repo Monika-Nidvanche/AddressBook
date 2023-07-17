@@ -1,5 +1,9 @@
 package com.addressbook;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -27,7 +31,8 @@ public class AddressBookImp {
 			System.out.println("6. Search persion by city or state");
 			System.out.println("7. Contact count by city or state");
 			System.out.println("8. Sort contact by name");
-			System.out.println("9. Exit \n");
+			System.out.println("9. File IO (Read/Write)");
+			System.out.println("10. Exit \n");
 
 			System.out.print("Enter your choice : ");
 			int c = sc.nextInt();
@@ -68,6 +73,10 @@ public class AddressBookImp {
 				break;
 
 			case 9:
+				fileIO(list);
+				break;
+
+			case 10:
 				n = false;
 				System.out.println("exit successfull...");
 				break;
@@ -77,6 +86,64 @@ public class AddressBookImp {
 
 			}
 		}
+	}
+
+	// UC12
+	private static void fileIO(List<Contacts> list) {
+
+		System.out.println("1. Write");
+		System.out.println("2. Read");
+		System.out.println("Enter your choice");
+		int c = sc.nextInt();
+
+		switch (c) {
+		case 1:
+			fileWrite(list);
+			break;
+		case 2:
+			fileRead();
+			break;
+		default:
+			System.out.println("Enter valid choice");
+		}
+
+	}
+
+	private static void fileRead() {
+
+		try {
+			FileReader fileReader = new FileReader("C:\\AddressBook\\Contact.txt");
+			int i;
+			while ((i = fileReader.read()) != -1) {
+				System.out.print((char) i);
+			}
+			System.out.println("\n");
+			fileReader.close();
+
+		} catch (IOException e) {
+			System.out.println("error");
+		}
+
+	}
+
+	private static void fileWrite(List<Contacts> list) {
+		try {
+			File filepath = new File("C:\\AddressBook\\Contact.txt");
+			FileWriter filewriter = new FileWriter(filepath);
+			Iterator<Contacts> l = list.iterator();
+			while (l.hasNext()) {
+				Contacts c = l.next();
+				String s = c.toString();
+				filewriter.write(s);
+			}
+			filewriter.close();
+			System.out.println("File created...");
+			System.out.println();
+
+		} catch (IOException e) {
+			System.out.println("error");
+		}
+
 	}
 
 	// UC11
