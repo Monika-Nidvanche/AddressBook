@@ -18,8 +18,6 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-
-import com.addressbook1.Contacts;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 
@@ -138,7 +136,7 @@ public class AddressBookImp {
 	private static Connection getConnection() {
 		final String URL = "jdbc:mysql://localhost:3306/addressbook";
 		final String USER = "root";
-		final String PASSWORD = "monika@123";
+		final String PASSWORD = "root";
 
 		Connection connection = null;
 
