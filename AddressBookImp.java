@@ -130,7 +130,6 @@ public class AddressBookImp {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	private static Connection getConnection() {
@@ -150,7 +149,6 @@ public class AddressBookImp {
 			e.printStackTrace();
 		}
 		return connection;
-
 	}
 
 	// UC13
