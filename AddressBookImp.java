@@ -24,7 +24,8 @@ public class AddressBookImp {
 			System.out.println("4. Add multiple contact");
 			System.out.println("5. Search contacts");
 			System.out.println("6. Search persion by city or state");
-			System.out.println("7. Exit \n");
+			System.out.println("7. Contact count by city or state");
+			System.out.println("8. Exit \n");
 
 			System.out.print("Enter your choice : ");
 			int c = sc.nextInt();
@@ -57,6 +58,10 @@ public class AddressBookImp {
 				break;
 
 			case 7:
+				countByCityOrState(list);
+				break;
+
+			case 8:
 				n = false;
 				System.out.println("exit successfull...");
 				break;
@@ -66,6 +71,51 @@ public class AddressBookImp {
 
 			}
 		}
+	}
+
+	// UC10
+	private static void countByCityOrState(List<Contacts> list) {
+
+		System.out.println("1. City");
+		System.out.println("2. State");
+		System.out.print("Enter choice to search : ");
+
+		int choice = sc.nextInt();
+
+		switch (choice) {
+		case 1:
+			getCountByCity(list);
+			break;
+
+		case 2:
+			getCountByState(list);
+			break;
+
+		default:
+			System.out.println("Enter valid choice \n");
+
+		}
+
+	}
+
+	private static void getCountByState(List<Contacts> list) {
+
+		System.out.print("Enter state : ");
+		String searchbystate = sc.next();
+
+		long stream = list.stream().filter(l -> (l.state.equals(searchbystate))).count();
+		System.out.println(stream + "\n");
+
+	}
+
+	private static void getCountByCity(List<Contacts> list) {
+
+		System.out.print("Enter city : ");
+		String searchbycity = sc.next();
+
+		long stream = list.stream().filter(l -> (l.city.equals(searchbycity))).count();
+		System.out.println(stream + "\n");
+
 	}
 
 	// UC9
