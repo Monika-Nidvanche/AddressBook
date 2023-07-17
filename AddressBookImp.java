@@ -22,8 +22,6 @@ import java.util.stream.Collectors;
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 
-import jdbc.Configuration;
-
 public class AddressBookImp {
 	static Scanner sc = new Scanner(System.in);
 	static Scanner s1 = new Scanner(System.in);
@@ -121,7 +119,7 @@ public class AddressBookImp {
 	// UC16
 	private static void insertStatement() {
 
-		Connection connection = Configuration.connection;
+		Connection connection = getConnection();
 		PreparedStatement ps = null;
 		try {
 			ps = connection.prepareStatement("insert into addressbooktable (firstname,"
