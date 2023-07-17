@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Scanner;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class AddressBookImp {
 	static Scanner sc = new Scanner(System.in);
@@ -20,7 +21,8 @@ public class AddressBookImp {
 			System.out.println("2. Edit contact");
 			System.out.println("3. Delete contact");
 			System.out.println("4. Add multiple contact");
-			System.out.println("5. Exit \n");
+			System.out.println("5. Search contacts");
+			System.out.println("6. Exit \n");
 
 			System.out.print("Enter your choice : ");
 			int c = sc.nextInt();
@@ -45,6 +47,10 @@ public class AddressBookImp {
 				break;
 
 			case 5:
+				searchContact(list);
+				break;
+
+			case 6:
 				n = false;
 				System.out.println("exit successfull...");
 				break;
@@ -54,6 +60,18 @@ public class AddressBookImp {
 
 			}
 		}
+	}
+
+	// UC8
+	private static void searchContact(List<Contacts> list) {
+
+		System.out.print("Enter city to search : ");
+		String city = sc.next();
+		List<Contacts> l = list.stream().filter(search -> search.getCity().equals(city)).collect(Collectors.toList());
+		System.out.println("Contacts from " + city);
+		l.forEach(contacts -> System.out.println(contacts));
+		System.out.println();
+
 	}
 
 	// UC5
