@@ -13,6 +13,8 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import com.opencsv.CSVReader;
+import com.opencsv.CSVWriter;
 
 public class AddressBookImp {
 	static Scanner sc = new Scanner(System.in);
@@ -32,7 +34,8 @@ public class AddressBookImp {
 			System.out.println("7. Contact count by city or state");
 			System.out.println("8. Sort contact by name");
 			System.out.println("9. File IO (Read/Write)");
-			System.out.println("10. Exit \n");
+			System.out.println("10. CSV File (Read/Write)");
+			System.out.println("11. Exit \n");
 
 			System.out.print("Enter your choice : ");
 			int c = sc.nextInt();
@@ -77,6 +80,10 @@ public class AddressBookImp {
 				break;
 
 			case 10:
+				CSVFile(list);
+				break;
+
+			case 11:
 				n = false;
 				System.out.println("exit successfull...");
 				break;
@@ -86,6 +93,76 @@ public class AddressBookImp {
 
 			}
 		}
+	}
+
+	// UC13
+	private static void CSVFile(List<Contacts> list) {
+		System.out.println("1. Write");
+		System.out.println("2. Read");
+		System.out.print("Enter your choice : ");
+		int c = sc.nextInt();
+		switch (c) {
+		case 1:
+			CSVFileWrite(list);
+			break;
+		case 2:
+			CSVFileRead();
+			break;
+		default:
+			System.out.println("Please enter valid choice \n");
+
+		}
+
+	}
+
+	private static void CSVFileRead() {
+
+		String path = "C:\\AddressBook\\Contact.csv";
+		try (CSVReader csvReader = new CSVReader(new FileReader(path))) {
+			String[] header = csvReader.readNext();
+			String[] file;
+			while ((file = csvReader.readNext()) != null) {
+				String firstname = file[0];
+				String lastname = file[1];
+				String address = file[2];
+				String city = file[3];
+				String state = file[4];
+				String zip = String.valueOf(file[5]);
+				String phoneno = String.valueOf(file[6]);
+				String email = file[7];
+
+				System.out.println(
+						"firstname=" + firstname + " lastname=" + lastname + " address=" + address + " " + "city="
+								+ city + " state=" + state + " zip=" + zip + " phoneno=" + phoneno + " email=" + email);
+			}
+			System.out.println();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	private static void CSVFileWrite(List<Contacts> list) {
+		String path = "C:\\AddressBook\\Contact.csv";
+		try (CSVWriter csvWriter = new CSVWriter(new FileWriter(path))) {
+
+			String[] header = { "firstname", "lastname", "address", "city", "state", "zip", "phoneno", "email" };
+			csvWriter.writeNext(header);
+			if (!list.isEmpty()) {
+
+				Iterator<Contacts> l = list.iterator();
+				while (l.hasNext()) {
+					Contacts c = l.next();
+					String[] values = { c.getFirstname(), c.getLastname(), c.getAddress(), c.getCity(), c.getState(),
+							String.valueOf(c.getZip()), String.valueOf(c.getPhoneno()), c.getEmail() };
+					csvWriter.writeNext(values);
+				}
+			}
+			System.out.println("File created...\n");
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+
+		}
+
 	}
 
 	// UC12
