@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -22,7 +23,8 @@ public class AddressBookImp {
 			System.out.println("3. Delete contact");
 			System.out.println("4. Add multiple contact");
 			System.out.println("5. Search contacts");
-			System.out.println("6. Exit \n");
+			System.out.println("6. Search persion by city or state");
+			System.out.println("7. Exit \n");
 
 			System.out.print("Enter your choice : ");
 			int c = sc.nextInt();
@@ -51,6 +53,10 @@ public class AddressBookImp {
 				break;
 
 			case 6:
+				searchByCityOrState(list);
+				break;
+
+			case 7:
 				n = false;
 				System.out.println("exit successfull...");
 				break;
@@ -60,6 +66,54 @@ public class AddressBookImp {
 
 			}
 		}
+	}
+
+	// UC9
+	private static void searchByCityOrState(List<Contacts> list) {
+
+		System.out.println("1. City");
+		System.out.println("2. State");
+		System.out.print("Enter choice to search : ");
+
+		int choice = sc.nextInt();
+
+		switch (choice) {
+		case 1:
+			getByCity(list);
+			break;
+
+		case 2:
+			getByState(list);
+			break;
+
+		default:
+			System.out.println("Enter valid choice");
+			System.out.println();
+
+		}
+
+	}
+
+	private static void getByState(List<Contacts> list) {
+
+		System.out.print("Enter state : ");
+		String searchbystate = sc.next();
+
+		Map<String, String> map = list.stream().filter(l -> (l.state.equals(searchbystate)))
+				.collect(Collectors.toMap(l -> l.firstname, l -> l.state));
+		System.out.println(map + "\n");
+
+	}
+
+	private static void getByCity(List<Contacts> list) {
+
+		System.out.print("Enter city : ");
+		String searchbycity = sc.next();
+
+		Map<String, String> map = list.stream().filter(l -> (l.city.equals(searchbycity)))
+				.collect(Collectors.toMap(l -> l.firstname, l -> l.city));
+		System.out.println(map + "\n");
+
 	}
 
 	// UC8
