@@ -7,9 +7,6 @@ import java.util.ListIterator;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
-import com.addressbook1.Contacts;
-import com.addressbook1.DeleteContact;
-
 public class AddressBookImp {
 	static Scanner sc = new Scanner(System.in);
 	static Scanner s1 = new Scanner(System.in);
@@ -57,7 +54,6 @@ public class AddressBookImp {
 	// UC4
 	private static void deleteContact(List<Contacts> list) {
 		boolean record = false;
-		Scanner sc = new Scanner(System.in);
 		System.out.println("Enter name to delete : ");
 		String deleterecord = sc.next();
 		Iterator<Contacts> iterator = list.iterator();
